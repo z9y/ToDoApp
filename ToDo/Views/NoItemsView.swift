@@ -45,6 +45,7 @@ struct NoItemsView: View {
         }
     }
     
+    //ANIMACJA PRZYCISKU
     func addButtonAnimation() {
         guard !addAnimation else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

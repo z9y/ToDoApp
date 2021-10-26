@@ -15,7 +15,7 @@ struct AddView: View {
     @State var textFieldText: String = ""
     @State var prior: String = "Low"
     @State var datePicker = Date()
-    @State var cat: Int = 0
+    @State var category: Int = 0
     
     @State var alertTitle: String = ""
     @State var showAlert: Bool = false
@@ -63,7 +63,7 @@ struct AddView: View {
                 }
                 
                 Section {
-                Picker("Select category", selection: $cat, content: {
+                Picker("Select category", selection: $category, content: {
                     ForEach(0..<listViewModel.categories.count, id: \.self) {
                         Text(listViewModel.categories[$0].name).tag($0)
                         }
@@ -74,7 +74,6 @@ struct AddView: View {
                 
                 Section {
                     DatePicker("Date", selection: $datePicker, in: Date()...)
-                        //.datePickerStyle(.graphical)
                 } header: {
                     Text("Select date and time")
                 }
@@ -91,21 +90,22 @@ struct AddView: View {
             }
         }
     }
-    
+    //DODANIE ELEMENTU DO LISTY ORAZ POWROT DO WIDOKU LISTY
     func saveButton() {
         if checkText() {
-            listViewModel.addItem(text: textFieldText, priority: prior, category: cat, date: datePicker)
+            listViewModel.addItem(text: textFieldText, priority: prior, category: category, date: datePicker)
             self.presentationMode.wrappedValue.dismiss()
         }
     }
     
+    //SPRAWDZENIE ILOSCI ZNAKÓW WPROWADZONYCH PRZEZ UŻYTKOWNIKA
     func checkText() -> Bool {
         if textFieldText.count < 4 {
             alertTitle = "The text must contain at least 4 characters."
             showAlert.toggle()
             return false
         }
-        listViewModel.showToast.toggle()
+        listViewModel.showAddedToast.toggle()
         return true
     }
     

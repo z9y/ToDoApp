@@ -6,57 +6,48 @@
 //
 
 import SwiftUI
-import AlertToast
+//import AlertToast
 
 struct ListView: View {
     
     @EnvironmentObject var listViewModel: ListViewModel
     @State private var showDeleteAlert = false
     @State private var indexSetToDelete: IndexSet?
-    @State private var showDeleteToast = false
     
     var body: some View {
-        ZStack {
-            if listViewModel.items.isEmpty {
-                NoItemsView()
-            } else {
-                List {
-                    ForEach(listViewModel.items) { item in
-                        RowView(item: item)
-                    }
-                    .onDelete { (indexSet) in
-                        self.showDeleteAlert = true
-                        self.indexSetToDelete = indexSet
-                    }
-                    .onMove(perform: listViewModel.moveItem)
-                }
-                .alert(isPresented: $showDeleteAlert) {
-                    deleteAlert()
-                }
-                .listStyle(.plain)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        EditButton()
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink("Add", destination: AddView())
-                    }
-                }
+        List {
+            ForEach(listViewModel.items) { item in
+                RowView(item: item)
+                    .listRowBackground(Color.clear)
             }
+            .onDelete { (indexSet) in
+                self.showDeleteAlert = true
+                self.indexSetToDelete = indexSet
+            }
+            .onMove(perform: listViewModel.moveItem)
         }
-        .navigationTitle("ToDo")
-        .toast(isPresenting: $listViewModel.showToast) {
-            AlertToast(type: .complete(.green), title: "Added")
+        .alert(isPresented: $showDeleteAlert) {
+            deleteAlert()
         }
-        .toast(isPresenting: $showDeleteToast) {
-            AlertToast(type: .complete(.red), title: "Deleted")
+        
+        .listStyle(.plain)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+                    .foregroundColor(.primary)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink("Add", destination: AddView())
+                    .foregroundColor(.primary)
+            }
         }
     }
     
+    //ALERT PRZY PRÓBIE USUNIĘCIA ELEMENTU
     func deleteAlert() -> Alert {
         return Alert(title: Text("Are You sure ?"), primaryButton: .destructive(Text("Delete")) {
             listViewModel.deleteItem(indexSet: self.indexSetToDelete!)
-            showDeleteToast.toggle()
+            listViewModel.showDeleteToast.toggle()
         },
             secondaryButton: .cancel())
     }
