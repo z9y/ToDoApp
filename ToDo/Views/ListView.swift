@@ -13,6 +13,7 @@ struct ListView: View {
     @EnvironmentObject var listViewModel: ListViewModel
     @State private var showDeleteAlert = false
     @State private var indexSetToDelete: IndexSet?
+    @State private var showActionSheet = false
     
     var body: some View {
         List {
@@ -34,11 +35,26 @@ struct ListView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 EditButton()
-                    .foregroundColor(.primary)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink("Add", destination: AddView())
-                    .foregroundColor(.primary)
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Sort") {
+                    showActionSheet = true
+                }
+            }
+        }
+        .foregroundColor(.primary)
+        .confirmationDialog("Sort by: ", isPresented: $showActionSheet, titleVisibility: .visible) {
+            Button("Date") {
+                listViewModel.sortByDate()
+            }
+            Button("Category") {
+                listViewModel.sortByCategory()
+            }
+            Button("Priority") {
+                listViewModel.sortByPriority()
             }
         }
     }

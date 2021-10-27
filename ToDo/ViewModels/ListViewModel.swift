@@ -48,11 +48,42 @@ class ListViewModel: ObservableObject {
         let newItem = ItemModel(text: text, priority: priority, isCompleted: false, date: date, category: category)
         items.append(newItem)
     }
-    
+     
     //ZMIANA WYKONANIA
     func changeCompletion(item: ItemModel) {
         if let index = items.firstIndex(where: { $0.id == item.id }) {
             items[index] = item.changeCompletion()
+            let element = items.remove(at: index)
+            items.insert(element, at: items.count)
+            
+        }
+    }
+    
+    //SORTOWANIE PO DACIE
+    func sortByDate() {
+        items = items.sorted {
+            return $0.date < $1.date
+        }
+    }
+    
+    //SORTOWANIE PO KATEGORII
+    func sortByCategory() {
+        items = items.sorted {
+            return $0.category < $1.category
+        }
+    }
+    
+    //SORTOWANIE PO PRIORYTECIE 
+    func sortByPriority() {
+        items = items.sorted {
+            if $0.priority == "High" {
+                return true
+            }
+            if $0.priority == "Medium" && $1.priority != "High" {
+                return true
+            }
+            
+            return false
         }
     }
     
