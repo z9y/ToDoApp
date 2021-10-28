@@ -61,21 +61,21 @@ class ListViewModel: ObservableObject {
     
     //SORTOWANIE PO DACIE
     func sortByDate() {
-        items = items.sorted {
+        items.sort {
             return $0.date < $1.date
         }
     }
     
     //SORTOWANIE PO KATEGORII
     func sortByCategory() {
-        items = items.sorted {
+        items.sort {
             return $0.category < $1.category
         }
     }
     
     //SORTOWANIE PO PRIORYTECIE 
     func sortByPriority() {
-        items = items.sorted {
+        items.sort {
             if $0.priority == "High" {
                 return true
             }

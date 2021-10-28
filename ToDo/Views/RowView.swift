@@ -36,6 +36,7 @@ struct RowView: View {
             return Color.black
         }
     }
+    
     //SPRAWDZA CZY DATA WPROWADZONA PRZEZ UŻYTKOWNIKA JUŻ MINĘŁA
     func compareDate() {
         if Date() > item.date {
