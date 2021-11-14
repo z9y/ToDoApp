@@ -22,8 +22,6 @@ struct AddView: View {
     @State var showToast: Bool = false
     @FocusState private var isFocused: Bool
     
-    var priority = ["Low", "Medium", "High"]
-    
     var body: some View {
         VStack {
             HStack{
@@ -53,7 +51,7 @@ struct AddView: View {
             
                 Section {
                     Picker("Select priority", selection: $prior, content: {
-                        ForEach(priority, id: \.self) { text in
+                        ForEach(listViewModel.priority, id: \.self) { text in
                             Text(text)
                         }
                     })
@@ -65,7 +63,8 @@ struct AddView: View {
                 Section {
                 Picker("Select category", selection: $category, content: {
                     ForEach(0..<listViewModel.categories.count, id: \.self) {
-                        Text(listViewModel.categories[$0].name).tag($0)
+                        //Text(listViewModel.categories[$0].name).tag($0)
+                        Text(listViewModel.categories[$0].name)
                         }
                     })
                 } header: {

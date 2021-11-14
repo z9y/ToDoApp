@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import AlertToast
 
 struct ListView: View {
     
@@ -17,9 +16,11 @@ struct ListView: View {
     
     var body: some View {
         List {
-            ForEach(listViewModel.items) { item in
+            ForEach(listViewModel.searchResults) { item in
                 RowView(item: item)
                     .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    
             }
             .onDelete { (indexSet) in
                 self.showDeleteAlert = true
@@ -30,7 +31,7 @@ struct ListView: View {
         .alert(isPresented: $showDeleteAlert) {
             deleteAlert()
         }
-        
+        .searchable(text: $listViewModel.searchText)
         .listStyle(.plain)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

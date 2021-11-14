@@ -14,14 +14,6 @@ struct RowView: View {
     @State var repeatBool: Bool = false
     
     let item: ItemModel
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
-    //FORMATOWANIE DATY
-    func formatDate(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm E, d MMM y"
-        return formatter.string(from: date)
-    }
 
     //ZMIANA KOLORU PRIORYTETU
     func priorityChange() -> Color {
@@ -68,11 +60,11 @@ struct RowView: View {
                     .resizable()
                     .frame(width: 7.0, height: 7.0)
                     .foregroundColor(priorityChange())
-                Text("\(formatDate(date: item.date))")
+                Text("\(listViewModel.formatDate(date: item.date))")
                     .font(.caption2)
                     .foregroundColor(item.isCompleted ? .black : (checkDate ? (repeatBool ? .red : .black) : .black))
                     .strikethrough(item.isCompleted ? true : false)
-                    .onReceive(timer) { _ in
+                    .onReceive(listViewModel.timer) { _ in
                         compareDate()
                         if checkDate {
                             repeatBool.toggle()

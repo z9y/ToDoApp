@@ -18,6 +18,10 @@ class ListViewModel: ObservableObject {
     
     @Published var showAddedToast = false
     @Published var showDeleteToast = false
+    @Published var searchText = ""
+    
+    var priority = ["Low", "Medium", "High"]
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     let itemsKey: String = "itemsList"
     
@@ -53,9 +57,11 @@ class ListViewModel: ObservableObject {
     func changeCompletion(item: ItemModel) {
         if let index = items.firstIndex(where: { $0.id == item.id }) {
             items[index] = item.changeCompletion()
-            let element = items.remove(at: index)
-            items.insert(element, at: items.count)
             
+            if item.isCompleted == false {
+                let element = items.remove(at: index)
+                items.insert(element, at: items.count)
+            }
         }
     }
     
@@ -92,6 +98,21 @@ class ListViewModel: ObservableObject {
         if let encodedData = try? JSONEncoder().encode(items) {
             UserDefaults.standard.set(encodedData, forKey: itemsKey)
         }
+    }
+    
+    var searchResults: [ItemModel] {
+        if searchText.isEmpty {
+            return items
+        } else {
+            return items.filter { $0.text.uppercased().contains(searchText.uppercased()) }
+        }
+    }
+
+    //FORMATOWANIE DATY
+    func formatDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm E, d MMM y"
+        return formatter.string(from: date)
     }
     
     let categories: [Category] = [

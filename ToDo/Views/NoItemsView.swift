@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NoItemsView: View {
-    
     @State var addAnimation: Bool = false
     
     var body: some View {
